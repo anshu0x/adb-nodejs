@@ -13,29 +13,35 @@ const executeADBCommand = (command) => {
   });
 };
 
-// Function to input passcode using ADB
-const inputPasscode = async (passcode) => {
+// Function to list all installed apps using ADB
+const listInstalledApps = async () => {
   try {
     // Check if ADB is installed and device is connected
-    const adbVersion = await executeADBCommand('adb version');
+    const adbVersion = await executeADBCommand("adb version");
     console.log(`ADB Version: ${adbVersion}`);
 
-    const devices = await executeADBCommand('adb devices');
-    if (!devices.includes('device')) {
-      throw new Error('No device connected or unauthorized');
+    const devices = await executeADBCommand("adb devices");
+    if (!devices.includes("device")) {
+      throw new Error("No device connected or unauthorized");
     }
 
-    // Input the passcode using ADB
-    await executeADBCommand(`adb shell input text "${passcode}"`);
+    // List all installed apps using ADB
+    const packageList = await executeADBCommand("adb shell pm list packages -3");
+    const packages = packageList
+      .split("\n")
+      .filter((line) => line.startsWith("package:"))
+      .map((line) => line.replace("package:", ""));
 
-    console.log(`Passcode inputted successfully: ${passcode}`);
+    console.log("Installed apps:");
+    packages.forEach((packageName) => {
+      console.log(packageName);
+    });
+
+    console.log("App listing completed.");
   } catch (error) {
-    console.error('An error occurred:', error);
+    console.error("An error occurred:", error);
   }
 };
 
-// Specify the passcode to input
-const passcode = "3333";
-
-// Call the function to input the passcode
-inputPasscode(passcode);
+// Call the function to list installed apps
+listInstalledApps();
