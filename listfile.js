@@ -26,14 +26,19 @@ const listRootFilesOnDevice = async () => {
     }
 
     // List root files on the device
-    const rootFilesList = await executeADBCommand('adb shell ls /');
+    const rootFilesList = await executeADBCommand('adb shell ls /sdcard/Download');
     console.log(rootFilesList);
 
     console.log('Root files listed successfully.');
+
+    // Read the data of a file
+    const filePath = '/sdcard/Download/sample3.txt'; // Specify the file path you want to read
+    const fileData = await executeADBCommand(`adb shell cat ${filePath}`);
+    // console.log(fileData);
   } catch (error) {
     console.error('An error occurred:', error);
   }
 };
 
-// Call the function to list root files on the device
+// Call the function to list root files and read a file on the device
 listRootFilesOnDevice();
