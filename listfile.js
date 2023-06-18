@@ -14,7 +14,7 @@ const executeADBCommand = (command) => {
 };
 
 // Function to list root files on the device
-const listRootFilesOnDevice = async () => {
+const downloadFileFromDevice = async (deviceFilePath, localDestination) => {
   try {
     // Check if ADB is installed and device is connected
     const adbVersion = await executeADBCommand('adb version');
@@ -35,10 +35,19 @@ const listRootFilesOnDevice = async () => {
     const filePath = '/sdcard/Download/sample3.txt'; // Specify the file path you want to read
     const fileData = await executeADBCommand(`adb shell cat ${filePath}`);
     // console.log(fileData);
+       // Download the file from the device
+       await executeADBCommand(`adb pull ${deviceFilePath} ${localDestination}`);
+
+       console.log(`File downloaded successfully. Destination: ${localDestination}`);
+   
   } catch (error) {
     console.error('An error occurred:', error);
   }
 };
 
-// Call the function to list root files and read a file on the device
-listRootFilesOnDevice();
+// Specify the device file path and local destination path
+const deviceFilePath = '/sdcard/Download/sample3.txt'; // Specify the device file path
+const localDestination = '/home/anshu/Desktop/anshu.txt'; // Specify the local destination path
+
+// Call the function to download the file from the device
+downloadFileFromDevice(deviceFilePath, localDestination);
