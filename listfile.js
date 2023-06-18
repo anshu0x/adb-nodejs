@@ -36,10 +36,17 @@ const downloadFileFromDevice = async (deviceFilePath, localDestination) => {
     const fileData = await executeADBCommand(`adb shell cat ${filePath}`);
     // console.log(fileData);
        // Download the file from the device
-       await executeADBCommand(`adb pull ${deviceFilePath} ${localDestination}`);
+      //  await executeADBCommand(`adb pull ${deviceFilePath} ${localDestination}`);
 
-       console.log(`File downloaded successfully. Destination: ${localDestination}`);
+      //  console.log(`File downloaded successfully. Destination: ${localDestination}`);
    
+           // Upload the file to the device
+    const localFilePath = '/home/anshu/Desktop/anshu.txt'; // Specify the local file path
+    const deviceDestination = '/sdcard/Download/sample11.txt'; // Specify the device destination path
+    await executeADBCommand(`adb push ${localFilePath} ${deviceDestination}`);
+
+    console.log(`File uploaded successfully. Destination: ${deviceDestination}`);
+ 
   } catch (error) {
     console.error('An error occurred:', error);
   }
